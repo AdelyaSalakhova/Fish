@@ -24,7 +24,7 @@ GoldenFish::GoldenFish() : Fish("GoldenFish.png", 100, 150, 0, 2, 53, 38) {
 	clock.restart();
 }
 
-CatFish::CatFish() : Fish("catfish.png", 150, 250, 0, 94, 99, 36) {
+CatFish::CatFish() : Fish("catfish.png", 262, 250, 0, 94, 99, 36) {
 	FishNumber = 2;
 	this->Ls1 = 0; this->Ls2 = 51;
 	RightOrigin = { 99, 20 };
@@ -33,6 +33,7 @@ CatFish::CatFish() : Fish("catfish.png", 150, 250, 0, 94, 99, 36) {
 	this->sprite.setOrigin(RightOrigin.x, RightOrigin.y);
 	this->sprite.setPosition(x, y);
 	clock.restart();
+	rep = 0;
 }
 
 BettaFish::BettaFish() : Fish("bettafish.png", 100, 300, 12, 22, 76, 52) {
@@ -51,32 +52,11 @@ DanioFish::DanioFish() : Fish("danio.png", 100, 200, 20, 15, 79, 17) {
 	this->Ls1 = 0; this->Ls2 = 63;
 	RightOrigin = { 79, 0 };
 	LeftOrigin = { 0, 0 };
-	this->speed = 0.2;
+	this->speed = 0.1;
+	counter = 0.1;
 	this->sprite.setOrigin(RightOrigin.x, RightOrigin.y);
 	this->sprite.setPosition(x, y);
 	clock.restart();
-}
-
-void Fish::Update() {
-	if (x + dx >= 783) {
-		dir = 1;
-		this->sprite.setTextureRect(IntRect(this->Ls1, this->Ls2, this->w, this->h));
-		sprite.setOrigin(this->LeftOrigin.x, this->LeftOrigin.y);
-		x = x - w; tempx = x;
-	}
-	if (x - dx <= 16) {
-		dir = 0;
-		this->sprite.setTextureRect(IntRect(this->Rs1, this->Rs2, this->w, this->h));
-		sprite.setOrigin(this->RightOrigin.x, this->RightOrigin.y);
-		x = x + w; tempx = x;
-	}
-	switch (dir) {
-	case 0: dx = speed; dy = 0; break; // вправо
-	case 1: dx = -speed; dy = 0; break; //влево
-	}
-	x += dx * 0.5;
-	tempx = x;
-	sprite.setPosition(x, y);
 }
 
 void Fish::Checking() {
@@ -97,44 +77,44 @@ void Fish::Checking() {
 void Fish::BreathUp() {
 	float distance;
 	if (this->dir == 0) {
-			distance = sqrt(((40 + x) - tempx) * ((40 + x) - tempx) + (tempy - 104) * (tempy - 104));
-			this->tempx += 0.05 * ((40 + x) - tempx) / distance;
-			this->tempy -= 0.05 * ((this->tempy) - 104) / distance;
-			sprite.setPosition(tempx, tempy);
+		distance = sqrt(((40 + x) - tempx) * ((40 + x) - tempx) + (tempy - 104) * (tempy - 104));
+		this->tempx += 0.05 * ((40 + x) - tempx) / distance;
+		this->tempy -= 0.05 * ((this->tempy) - 104) / distance;
+		sprite.setPosition(tempx, tempy);
 	}
 	else {
-			distance = sqrt(((tempx)-(x - 40)) * ((tempx)-(x - 40)) + (tempy - 104) * (tempy - 104));
-			this->tempx -= 0.05 * ((tempx)-(x - 40)) / distance;
-			this->tempy -= 0.05 * ((this->tempy) - 104) / distance;
-			sprite.setPosition(tempx, tempy);
+		distance = sqrt(((tempx)-(x - 40)) * ((tempx)-(x - 40)) + (tempy - 104) * (tempy - 104));
+		this->tempx -= 0.05 * ((tempx)-(x - 40)) / distance;
+		this->tempy -= 0.05 * ((this->tempy) - 104) / distance;
+		sprite.setPosition(tempx, tempy);
 	}
 }
 
 void Fish::BreathDown() {
 	float distance;
 	if (this->dir == 0) {
-			distance = sqrt(((80 + x) - tempx) * ((80 + x) - tempx) + (y - tempy) * (y - tempy));
-			this->tempx += 0.05 * ((80 + x) - tempx) / distance;
-			this->tempy += 0.05 * (y - tempy) / distance;
-			sprite.setPosition(tempx, tempy);
+		distance = sqrt(((80 + x) - tempx) * ((80 + x) - tempx) + (y - tempy) * (y - tempy));
+		this->tempx += 0.05 * ((80 + x) - tempx) / distance;
+		this->tempy += 0.05 * (y - tempy) / distance;
+		sprite.setPosition(tempx, tempy);
 	}
 	else {
-			distance = sqrt((tempx - (x - 80)) * (tempx - (x - 80)) + (y - tempy) * (y - tempy));
-			this->tempx -= 0.05 * (tempx - (x - 80)) / distance;
-			this->tempy += 0.05 * (y - tempy) / distance;
-			sprite.setPosition(tempx, tempy);
+		distance = sqrt((tempx - (x - 80)) * (tempx - (x - 80)) + (y - tempy) * (y - tempy));
+		this->tempx -= 0.05 * (tempx - (x - 80)) / distance;
+		this->tempy += 0.05 * (y - tempy) / distance;
+		sprite.setPosition(tempx, tempy);
 	}
 }
 
 void Fish::EatingUp() {
 	float distance;
-	if (dir == 0) { // вправо
+	if (dir == 0) { // ГўГЇГ°Г ГўГ®
 		distance = sqrt(((40 + x) - tempx) * ((40 + x) - tempx) + (tempy - 120) * (tempy - 120));
 		this->tempx += 0.05 * ((40 + x) - tempx) / distance;
 		this->tempy -= 0.05 * ((this->tempy) - 120) / distance;
 		sprite.setPosition(tempx, tempy);
 	}
-	else if (dir == 1) { // влево
+	else if (dir == 1) { // ГўГ«ГҐГўГ®
 		distance = sqrt(((tempx)-(x - 40)) * ((tempx)-(x - 40)) + (tempy - 120) * (tempy - 120));
 		this->tempx -= 0.05 * ((tempx)-(x - 40)) / distance;
 		this->tempy -= 0.05 * ((this->tempy) - 120) / distance;
@@ -144,13 +124,13 @@ void Fish::EatingUp() {
 
 void Fish::EatingDown() {
 	float distance;
-	if (dir == 0) { // вправо
+	if (dir == 0) { // ГўГЇГ°Г ГўГ®
 		distance = sqrt(((80 + x) - tempx) * ((80 + x) - tempx) + (y - tempy) * (y - tempy));
 		this->tempx += 0.05 * ((80 + x) - tempx) / distance;
 		this->tempy += 0.05 * (y - tempy) / distance;
 		sprite.setPosition(tempx, tempy);
 	}
-	else if (dir == 1) { // влево
+	else if (dir == 1) { // ГўГ«ГҐГўГ®
 		distance = sqrt((tempx - (x - 80)) * (tempx - (x - 80)) + (y - tempy) * (y - tempy));
 		this->tempx -= 0.05 * (tempx - (x - 80)) / distance;
 		this->tempy += 0.05 * (y - tempy) / distance;
@@ -186,7 +166,7 @@ float Fish::GetTempX() {
 	return tempx;
 };
 
-float Fish :: GetTempY() {
+float Fish::GetTempY() {
 	return tempy;
 };
 
@@ -194,7 +174,7 @@ Sprite Fish::GetSprite() {
 	return sprite;
 }
 
-int Fish :: GetDir() {
+int Fish::GetDir() {
 	return dir;
 }
 
@@ -307,64 +287,19 @@ void User::ToFeed(RenderWindow& window, Sprite& herosprite) {
 	if (feed % 2 == 1) {
 		int m;
 		c++;
-		if (fish.size() == 1) c = 1;
-		else if (fish.size() == 2) {
-			if (c > 2) {
-				c = 1;
-			}
-		}
-		else if (fish.size() == 3) {
-			if (c > 3) {
-				c = 1;
-			}
-		}
-		else if (fish.size() == 4) {
-			if (c > 4) {
-				c = 1;
-			}
-		}
+		if (c > fish.size()) c = 1;
 		for (m = 0; m < fish.size(); m++) {
-			if (m != (c - 1)) {
+			if (m != (c - 1))  {
 				fish[m]->Update();
-				if (fish[m]->SetClock().getElapsedTime().asSeconds() > 10) {
-					fish[m]->Checking();
-					while (fish[m]->GetTempY() > 105) {
-						fish[m]->BreathUp();
-						for (int k = 0; k < fish.size(); k++) {
-							if (k != m)  fish[k]->Update();
-						}
-						window.clear();
-						window.draw(herosprite);
-						for (int j = 0; j < fish.size(); j++) {
-							window.draw(fish[j]->GetSprite());
-						}
-						window.display();
+					if (fish[m]->Breath()) {
+						Up(m, window, herosprite);
+						Down(m, window, herosprite);
+						fish[m]->SetX(fish[m]->GetTempX());
+						fish[m]->SetY(fish[m]->GetTempY());
+						fish[m]->SetClock().restart();
 					}
-					while (fish[m]->GetTempY() < fish[m]->GetY()) {
-						fish[m]->BreathDown();
-						for (int k = 0; k < fish.size(); k++) {
-							if (k != m)  fish[k]->Update();
-						}
-						window.clear();
-						window.draw(herosprite);
-						for (int j = 0; j < fish.size(); j++) {
-							window.draw(fish[j]->GetSprite());
-						}
-						window.display();
-					}
-					float t;
-					t = fish[m]->GetTempX();
-					fish[m]->SetX(t); 
-					t = fish[m]->GetTempY();
-					fish[m]->SetY(t);
-					fish[m]->SetClock().restart();
-				}
-				window.clear();
-				window.draw(herosprite);
-				for (int j = 0; j < fish.size(); j++) {
-					window.draw(fish[j]->GetSprite());
-				}
-				window.display();
+				
+				Draw(window, herosprite);
 			}
 			else {
 				fish[m]->Checking();
@@ -387,29 +322,12 @@ void User::ToFeed(RenderWindow& window, Sprite& herosprite) {
 					}
 					window.display();
 				}
-				while (fish[m]->GetTempY() < fish[m]->GetY()) {
-					fish[m]->EatingDown();
-					for (int k = 0; k < fish.size(); k++) {
-						if (k != m)  fish[k]->Update();
-					}
-					window.clear();
-					window.draw(herosprite);
-					for (int j = 0; j < fish.size(); j++) {
-						window.draw(fish[j]->GetSprite());
-					}
-					window.display();
-				}
-				float p;
-				p = fish[m]->GetTempX();
-				fish[m]->SetX(p);
-				p = fish[m]->GetTempY();
-				fish[m]->SetY(p);
+				Down(m, window, herosprite);
+				fish[m]->SetX(fish[m]->GetTempX());
+				fish[m]->SetY(fish[m]->GetTempY());
 				fish[m]->SetClock().restart();
 			}
 		}
-	}
-	else {
-
 	}
 }
 
@@ -465,44 +383,43 @@ void User::GetInfo(RenderWindow& window) {
 	}
 }
 
+void User::Up(int i, RenderWindow& window, Sprite& herosprite) {
+	fish[i]->Checking();
+	while (fish[i]->GetTempY() > 105) {
+		fish[i]->BreathUp();
+		for (int k = 0; k < fish.size(); k++) {
+			if (k != i)  fish[k]->Update();
+		}
+		Draw(window, herosprite);
+	}
+}
+
+void User::Down(int i, RenderWindow& window, Sprite& herosprite) {
+	while (fish[i]->GetTempY() < fish[i]->GetY()) {
+		fish[i]->BreathDown();
+		for (int k = 0; k < fish.size(); k++) {
+			if (k != i)  fish[k]->Update();
+		}
+		Draw(window, herosprite);
+	}
+}
+
 void User::Show(RenderWindow& window, Sprite& herosprite) {
 	for (int i = 0; i < fish.size(); i++) {
 		fish[i]->Update();
-		if (fish[i]->SetClock().getElapsedTime().asSeconds() > 10) {
-			fish[i]->Checking();
-			while (fish[i]->GetTempY() > 105) {
-				fish[i]->BreathUp();
-				for (int k = 0; k < fish.size(); k++) {
-					if (k != i)  fish[k]->Update();
-				}
-				window.clear();
-				window.draw(herosprite);
-				for (int j = 0; j < fish.size(); j++) {
-					window.draw(fish[j]->GetSprite());
-				}
-				window.display();
-			}
-			while (fish[i]->GetTempY() < fish[i]->GetY()) {
-				fish[i]->BreathDown();
-				for (int k = 0; k < fish.size(); k++) {
-					if (k != i)  fish[k]->Update();
-				}
-				window.clear();
-				window.draw(herosprite);
-				for (int j = 0; j < fish.size(); j++) {
-					window.draw(fish[j]->GetSprite());
-				}
-				window.display();
-			}
-			float t;
-			t = fish[i]->GetTempX();
-			fish[i]->SetX(t);
-			t = fish[i]->GetTempY();
-			fish[i]->SetY(t);
-			fish[i]->SetClock().restart();
+		if (fish[i]->Breath()) {
+				Up(i, window, herosprite);
+				Down(i, window, herosprite);
+				fish[i]->SetX(fish[i]->GetTempX());
+				fish[i]->SetY(fish[i]->GetTempY());
+				fish[i]->SetClock().restart();
 		}
 	}
-    window.clear();
+	Draw(window, herosprite);
+}
+
+void User::Draw(RenderWindow& window, Sprite& herosprite) {
+	window.clear();
 	window.draw(herosprite);
 	for (int j = 0; j < fish.size(); j++) {
 		window.draw(fish[j]->GetSprite());
@@ -514,12 +431,151 @@ Event& User::GetUserEvent() {
 	return UserEvent;
 }
 
-vector <Fish*>& User :: GetFish() {
+vector <Fish*>& User::GetFish() {
 	return fish;
 };
 
-User :: ~User() {
+User::~User() {
 	for (int i = 0; i < fish.size(); i++) {
 		delete fish[i];
 	}
+}
+
+void GoldenFish::Update() {
+	if (x + dx >= 783) {
+		dir = 1;
+		this->sprite.setTextureRect(IntRect(this->Ls1, this->Ls2, this->w, this->h));
+		sprite.setOrigin(this->LeftOrigin.x, this->LeftOrigin.y);
+		x = x - w; tempx = x;
+	}
+	if (x - dx <= 16) {
+		dir = 0;
+		this->sprite.setTextureRect(IntRect(this->Rs1, this->Rs2, this->w, this->h));
+		sprite.setOrigin(this->RightOrigin.x, this->RightOrigin.y);
+		x = x + w; tempx = x;
+	}
+	switch (dir) {
+	case 0: dx = speed; dy = 0; break;
+	case 1: dx = -speed; dy = 0; break;
+	}
+	x += dx * 0.5;
+	tempx = x;
+	sprite.setPosition(x, y);
+}
+
+void CatFish::Update() {
+	if (rep == 0) {
+		if  (x + dx >= 522) {
+			dir = 1;
+			this->sprite.setTextureRect(IntRect(this->Ls1, this->Ls2, this->w, this->h));
+			sprite.setOrigin(this->LeftOrigin.x, this->LeftOrigin.y);
+			x = x - w; tempx = x;
+		}
+		else if  (x - dx <= 260) {
+			dir = 0;
+			this->sprite.setTextureRect(IntRect(this->Rs1, this->Rs2, this->w, this->h));
+			sprite.setOrigin(this->RightOrigin.x, this->RightOrigin.y);
+			x = x + w; tempx = x;
+			rep = 1;
+		}
+	}
+	else if (rep == 1) {
+		if  (x + dx >= 785) {
+		    dir = 1;
+			this->sprite.setTextureRect(IntRect(this->Ls1, this->Ls2, this->w, this->h));
+			sprite.setOrigin(this->LeftOrigin.x, this->LeftOrigin.y);
+			x = x - w; tempx = x;
+		}
+		else if  (x - dx <= 16) {
+			dir = 0;
+			this->sprite.setTextureRect(IntRect(this->Rs1, this->Rs2, this->w, this->h));
+			sprite.setOrigin(this->RightOrigin.x, this->RightOrigin.y);
+			x = x + w; tempx = x;
+		}
+	}
+	switch (dir) {
+	case 0: dx = speed; dy = 0; break;
+	case 1: dx = -speed; dy = 0; break;
+	}
+	x += dx * 0.5;
+	tempx = x;
+	sprite.setPosition(x, y);
+}
+
+void BettaFish::Update() {
+	if (x + dx >= 783) {
+		dir = 1;
+		this->sprite.setTextureRect(IntRect(this->Ls1, this->Ls2, this->w, this->h));
+		sprite.setOrigin(this->LeftOrigin.x, this->LeftOrigin.y);
+		x = x - w; tempx = x;
+		speed = speed - 0.01;
+	}
+	if (x - dx <= 16) {
+		dir = 0;
+		this->sprite.setTextureRect(IntRect(this->Rs1, this->Rs2, this->w, this->h));
+		sprite.setOrigin(this->RightOrigin.x, this->RightOrigin.y);
+		x = x + w; tempx = x;
+		speed = speed - 0.01;
+	}
+	if (speed <= 0) speed = 0.1;
+	switch (dir) {
+	case 0: dx = speed; dy = 0; break;
+	case 1: dx = -speed; dy = 0; break;
+	}
+	x += dx * 0.5;
+	tempx = x;
+	sprite.setPosition(x, y);
+}
+
+void DanioFish::Update() {
+	if (x + dx >= 785) {
+		dir = 1;
+		this->sprite.setTextureRect(IntRect(this->Ls1, this->Ls2, this->w, this->h));
+		sprite.setOrigin(this->LeftOrigin.x, this->LeftOrigin.y);
+		x = x - w; tempx = x;
+	}
+	if (x - dx <= 16) {
+		dir = 0;
+		this->sprite.setTextureRect(IntRect(this->Rs1, this->Rs2, this->w, this->h));
+		sprite.setOrigin(this->RightOrigin.x, this->RightOrigin.y);
+		x = x + w; tempx = x;
+	}
+	if (speed < 0.4) {
+		speed = speed * 1.0001;
+	}
+	switch (dir) {
+	case 0: dx = speed; dy = 0; break;
+	case 1: dx = -speed; dy = 0; break;
+	}
+	x += dx * 0.5;
+	tempx = x;
+	sprite.setPosition(x, y);
+}
+
+bool  GoldenFish::Breath() {
+	float time;
+	time = this->clock.getElapsedTime().asSeconds();
+	if (time > 10) return 1;
+	else return 0;
+}
+
+bool CatFish ::Breath() {
+	float time;
+	time = this->clock.getElapsedTime().asSeconds();
+	if (time > 15) return 1;
+	else return 0;
+}
+
+bool  BettaFish::Breath() {
+	float time;
+	time = this->clock.getElapsedTime().asSeconds();
+	if (time > 5) return 1;
+	else return 0;
+}
+
+bool  DanioFish ::Breath() {
+	float time;
+	time = this->clock.getElapsedTime().asSeconds();
+	if (time > 20) return 1;
+	else return 0;
 }
